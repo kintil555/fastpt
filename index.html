@@ -1,441 +1,398 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PixelForge — Photo Editor</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<title>PixelForge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <!-- HEADER -->
-  <header class="header">
-    <div class="logo">Pixel<span>Forge</span></div>
-    <div class="header-actions">
-      <button class="btn btn-ghost" id="btnNewCanvas">＋ Canvas Baru</button>
-      <button class="btn btn-primary" id="btnDownload">⬇ Download</button>
+
+<!-- ═══ HEADER ═══════════════════════════════════════════════════ -->
+<header id="appHeader">
+  <div class="logo">Pixel<span>Forge</span></div>
+
+  <div class="toolbar-center">
+    <button class="hbtn" id="btnUndo" title="Undo (Ctrl+Z)">
+      <svg viewBox="0 0 20 20"><path d="M7 3L2 8l5 5V9.5c4.5 0 7.5 1.5 9 5C20.5 9 17 4.5 7 4.5V3z"/></svg>
+    </button>
+    <button class="hbtn" id="btnRedo" title="Redo (Ctrl+Y)">
+      <svg viewBox="0 0 20 20"><path d="M13 3l5 5-5 5V9.5C8.5 9.5 5.5 11 4 14.5 4.5 9 8 4.5 13 4.5V3z"/></svg>
+    </button>
+    <div class="hdivider"></div>
+    <button class="hbtn zoom-out" id="btnZoomOut" title="Zoom Out">−</button>
+    <button class="hbtn zoom-lbl" id="zoomLabel">100%</button>
+    <button class="hbtn zoom-in" id="btnZoomIn" title="Zoom In">+</button>
+    <button class="hbtn" id="btnZoomFit" title="Fit to screen">Fit</button>
+    <div class="hdivider"></div>
+    <button class="hbtn" id="btnNewCanvas" title="New Canvas">New</button>
+    <button class="hbtn" id="btnClear" title="Clear All">Clear</button>
+  </div>
+
+  <div class="header-right">
+    <button class="btn-download" id="btnDownload">↓ Download</button>
+  </div>
+</header>
+
+<!-- ═══ LAYOUT ════════════════════════════════════════════════════ -->
+<div id="appBody">
+
+  <!-- LEFT: TOOLS -->
+  <aside id="toolPanel">
+    <div class="tool-section">
+      <button class="tbtn active" data-tool="select" title="Select / Move (V)">
+        <svg viewBox="0 0 24 24"><path d="M5 3l14 9-7 1-4 7z" fill="currentColor"/></svg>
+      </button>
+      <button class="tbtn" data-tool="text" title="Text (T)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 6h16M12 6v13M8 19h8"/></svg>
+      </button>
+      <button class="tbtn" data-tool="brush" title="Brush (B)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7-3-3-7 7c-1 1-1 3 0 3s2 1 3 0z"/><path d="M19 5l-3 3"/></svg>
+      </button>
+      <button class="tbtn" data-tool="eraser" title="Eraser (E)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 20H7L3 16l11-11 8 8z"/><path d="M6.5 17.5l5-5"/></svg>
+      </button>
+      <button class="tbtn" data-tool="fill" title="Fill (F)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 6l-8 8 4 4 8-8z"/><path d="M8 14l-4 4 2 2 4-4z"/><circle cx="20.5" cy="18.5" r="1.5" fill="currentColor"/></svg>
+      </button>
+      <button class="tbtn" data-tool="eyedropper" title="Eyedropper (I)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l7 7-1 1-2-2-6 6-1 4-4-1 6-6-2-2z"/></svg>
+      </button>
     </div>
-  </header>
 
-  <!-- MAIN LAYOUT -->
-  <div class="app-layout">
+    <div class="tool-sep"></div>
 
-    <!-- LEFT TOOLBAR -->
-    <aside class="toolbar-left">
-      <div class="tool-group">
-        <button class="tool-btn active" data-tool="select" title="Pilih (V)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3l14 9-7 1-4 7L5 3z"/></svg>
-        </button>
-        <button class="tool-btn" data-tool="move" title="Pindah (M)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M3 12h18M8 8l-5 4 5 4M16 8l5 4-5 4"/></svg>
-        </button>
-        <button class="tool-btn" data-tool="text" title="Teks (T)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h10M4 17h7"/><rect x="14" y="11" width="6" height="8" rx="1"/><path d="M17 11V7"/></svg>
-        </button>
-        <button class="tool-btn" data-tool="crop" title="Crop (C)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2v14a2 2 0 002 2h14M2 6h14a2 2 0 012 2v14"/></svg>
-        </button>
+    <!-- Colors -->
+    <div class="color-block">
+      <div id="bgSwatch" class="swatch swatch-bg" title="BG color"></div>
+      <div id="fgSwatch" class="swatch swatch-fg" title="FG color"></div>
+      <button class="swap-btn" id="btnSwapColors" title="Swap colors">⇄</button>
+    </div>
+    <input type="color" id="fgPicker" value="#ffffff" style="display:none"/>
+    <input type="color" id="bgPicker" value="#000000" style="display:none"/>
+
+    <div class="tool-sep"></div>
+
+    <!-- Brush size -->
+    <div class="v-ctrl">
+      <span class="v-lbl">SIZE</span>
+      <input type="range" id="brushSize" min="1" max="120" value="12" orient="vertical" class="vrange"/>
+      <span class="v-val" id="brushSizeVal">12</span>
+    </div>
+    <div class="v-ctrl">
+      <span class="v-lbl">OPA</span>
+      <input type="range" id="brushOpacity" min="1" max="100" value="100" orient="vertical" class="vrange"/>
+      <span class="v-val" id="brushOpacityVal">100</span>
+    </div>
+
+    <div class="tool-sep"></div>
+    <!-- Add photo shortcut -->
+    <button class="tbtn" id="btnAddPhoto" title="Add Photo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+    </button>
+  </aside>
+
+  <!-- CENTER: CANVAS -->
+  <main id="canvasArea">
+    <!-- Canvas size bar -->
+    <div id="canvasBar">
+      <label>W</label>
+      <input type="number" id="cW" value="800" min="50" max="6000" class="cInput"/>
+      <label>H</label>
+      <input type="number" id="cH" value="600" min="50" max="6000" class="cInput"/>
+      <select id="cPreset" class="cSel">
+        <option value="">Preset…</option>
+        <option value="1920x1080">FHD 1920×1080</option>
+        <option value="1280x720">HD 1280×720</option>
+        <option value="1080x1080">IG Square</option>
+        <option value="1080x1920">Story 9:16</option>
+        <option value="800x600">800×600</option>
+        <option value="400x400">400×400</option>
+      </select>
+      <button class="cBtn" id="btnApplySize">Apply</button>
+    </div>
+
+    <!-- Viewport -->
+    <div id="viewport">
+      <div id="canvasWrapper">
+        <canvas id="mainCanvas"></canvas>
+        <canvas id="overlayCanvas"></canvas>
       </div>
-      <div class="tool-separator"></div>
-      <div class="tool-group">
-        <button class="tool-btn" data-tool="brush" title="Brush (B)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><circle cx="5" cy="5" r="1"/></svg>
-        </button>
-        <button class="tool-btn" data-tool="eraser" title="Eraser (E)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 20H7L3 16l11-11 8 8-2 7z"/><path d="M6.5 17.5l5-5"/></svg>
-        </button>
-        <button class="tool-btn" data-tool="fill" title="Fill (F)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 6l-8 8 4 4 8-8-4-4z"/><path d="M8 14l-4 4 2 2 4-4-2-2z"/><circle cx="20" cy="18" r="2"/></svg>
-        </button>
-        <button class="tool-btn" data-tool="shape" title="Shape (S)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-        </button>
-      </div>
-      <div class="tool-separator"></div>
-      <!-- Color Picker -->
-      <div class="color-section">
-        <div class="color-stack">
-          <div class="color-swatch bg-swatch" id="bgColorDisplay" title="Background Color" style="background:#ffffff;"></div>
-          <div class="color-swatch fg-swatch" id="fgColorDisplay" title="Foreground Color" style="background:#000000;"></div>
+    </div>
+
+    <!-- Mobile bottom tool strip -->
+    <div id="mobileStrip">
+      <button class="mbtn" data-tool="select">▶</button>
+      <button class="mbtn" data-tool="brush">✏</button>
+      <button class="mbtn" data-tool="text">T</button>
+      <button class="mbtn" id="mAddPhoto">📷</button>
+      <button class="mbtn" id="mUndo">↩</button>
+      <button class="mbtn" id="mRedo">↪</button>
+      <button class="mbtn" id="mDownload">↓</button>
+    </div>
+  </main>
+
+  <!-- RIGHT: INSPECTOR -->
+  <aside id="inspector">
+    <div id="inspTabs">
+      <button class="itab active" data-tab="layers">Layers</button>
+      <button class="itab" data-tab="props">Props</button>
+      <button class="itab" data-tab="text">Text</button>
+      <button class="itab" data-tab="shape">Shape</button>
+      <button class="itab" data-tab="adjust">Adjust</button>
+    </div>
+
+    <!-- LAYERS -->
+    <div class="ipanel active" id="tab-layers">
+      <div class="irow space-between">
+        <span class="isec-title">Layers</span>
+        <div class="iactions">
+          <button class="iico" id="iAddPhoto" title="Add Photo">📷</button>
+          <button class="iico" id="iAddText" title="Add Text">T</button>
+          <button class="iico" id="iAddShape" title="Add Shape">▭</button>
+          <button class="iico danger" id="iDelLayer" title="Delete Layer">✕</button>
         </div>
-        <input type="color" id="fgColorPicker" value="#000000" style="opacity:0;position:absolute;pointer-events:none;" />
-        <input type="color" id="bgColorPicker" value="#ffffff" style="opacity:0;position:absolute;pointer-events:none;" />
       </div>
-      <div class="tool-separator"></div>
-      <!-- Brush Size -->
-      <div class="brush-size-wrap">
-        <label>Size</label>
-        <input type="range" id="brushSize" min="1" max="100" value="10" class="v-slider" />
-        <span id="brushSizeVal">10</span>
-      </div>
-      <!-- Opacity -->
-      <div class="brush-size-wrap">
+      <div id="layerList"></div>
+    </div>
+
+    <!-- PROPS (layer transform) -->
+    <div class="ipanel" id="tab-props">
+      <div class="isec-title">Layer Properties</div>
+      <div class="irow">
         <label>Opacity</label>
-        <input type="range" id="brushOpacity" min="0" max="100" value="100" class="v-slider" />
-        <span id="brushOpacityVal">100%</span>
+        <input type="range" id="pOpacity" min="0" max="100" value="100" class="islider"/>
+        <span class="ival" id="pOpacityVal">100%</span>
       </div>
-    </aside>
-
-    <!-- CANVAS AREA -->
-    <main class="canvas-area">
-      <div class="canvas-toolbar">
-        <!-- Zoom controls -->
-        <div class="zoom-controls">
-          <button class="mini-btn" id="btnZoomOut">−</button>
-          <span id="zoomLabel">100%</span>
-          <button class="mini-btn" id="btnZoomIn">+</button>
-          <button class="mini-btn" id="btnZoomFit">Fit</button>
-        </div>
-        <!-- Canvas size -->
-        <div class="canvas-size-controls">
-          <label>W:</label><input type="number" id="canvasW" value="800" min="100" max="4000" class="size-input" />
-          <label>H:</label><input type="number" id="canvasH" value="600" min="100" max="4000" class="size-input" />
-          <button class="mini-btn" id="btnApplySize">Apply</button>
-          <select id="presetSize" class="size-select">
-            <option value="">Preset...</option>
-            <option value="1920x1080">1920×1080 (FHD)</option>
-            <option value="1280x720">1280×720 (HD)</option>
-            <option value="1080x1080">1080×1080 (IG Square)</option>
-            <option value="1080x1920">1080×1920 (Story)</option>
-            <option value="800x600">800×600</option>
-            <option value="400x300">400×300</option>
-          </select>
-        </div>
-        <div class="history-btns">
-          <button class="mini-btn" id="btnUndo" title="Undo Ctrl+Z">↩ Undo</button>
-          <button class="mini-btn" id="btnRedo" title="Redo Ctrl+Y">↪ Redo</button>
-          <button class="mini-btn" id="btnClear" title="Bersihkan Canvas">🗑 Clear</button>
-        </div>
+      <div class="irow">
+        <label>Blend</label>
+        <select id="pBlend" class="isel">
+          <option value="source-over">Normal</option>
+          <option value="multiply">Multiply</option>
+          <option value="screen">Screen</option>
+          <option value="overlay">Overlay</option>
+          <option value="darken">Darken</option>
+          <option value="lighten">Lighten</option>
+          <option value="color-dodge">Dodge</option>
+          <option value="color-burn">Burn</option>
+          <option value="hard-light">Hard Light</option>
+          <option value="soft-light">Soft Light</option>
+          <option value="difference">Difference</option>
+          <option value="exclusion">Exclusion</option>
+          <option value="hue">Hue</option>
+          <option value="saturation">Saturation</option>
+          <option value="color">Color</option>
+          <option value="luminosity">Luminosity</option>
+        </select>
       </div>
-
-      <div class="canvas-viewport" id="canvasViewport">
-        <div class="canvas-wrapper" id="canvasWrapper">
-          <canvas id="mainCanvas"></canvas>
-          <!-- Overlay canvas for drawing preview -->
-          <canvas id="overlayCanvas" style="position:absolute;top:0;left:0;pointer-events:none;"></canvas>
-          <!-- Drag handles container -->
-          <div id="transformHandles" style="display:none;"></div>
-        </div>
+      <div class="irow">
+        <label>X</label><input type="number" id="pX" class="inum"/>&nbsp;
+        <label>Y</label><input type="number" id="pY" class="inum"/>
       </div>
-
-      <!-- Crop overlay -->
-      <div id="cropOverlay" class="crop-overlay" style="display:none;"></div>
-    </main>
-
-    <!-- RIGHT PANEL -->
-    <aside class="panel-right">
-
-      <!-- TABS -->
-      <div class="panel-tabs">
-        <button class="ptab active" data-tab="layers">Layers</button>
-        <button class="ptab" data-tab="text">Teks</button>
-        <button class="ptab" data-tab="adjust">Adjust</button>
-        <button class="ptab" data-tab="shape">Shape</button>
+      <div class="irow">
+        <label>W</label><input type="number" id="pW" class="inum" min="1"/>&nbsp;
+        <label>H</label><input type="number" id="pH" class="inum" min="1"/>
       </div>
+      <div class="irow">
+        <label>Rotate</label>
+        <input type="range" id="pRotate" min="-180" max="180" value="0" class="islider"/>
+        <span class="ival" id="pRotateVal">0°</span>
+      </div>
+      <div class="irow">
+        <input type="checkbox" id="pLock"/><label for="pLock">Lock aspect ratio</label>
+      </div>
+      <button class="ibtn-full" id="btnApplyProps">Apply</button>
+    </div>
 
-      <!-- LAYERS TAB -->
-      <div class="panel-content active" id="tab-layers">
-        <div class="panel-section">
-          <div class="section-header">
-            <span>Layers</span>
-            <div class="section-actions">
-              <button class="icon-btn" id="btnAddPhoto" title="Tambah Foto">📷</button>
-              <button class="icon-btn" id="btnAddText" title="Tambah Teks">T</button>
-              <button class="icon-btn" id="btnAddShape" title="Tambah Shape">▭</button>
-              <button class="icon-btn" id="btnDeleteLayer" title="Hapus Layer">🗑</button>
-            </div>
-          </div>
-          <div class="layers-list" id="layersList"></div>
-        </div>
-        <div class="panel-section">
-          <div class="section-header"><span>Layer Properties</span></div>
-          <div class="prop-row">
-            <label>Opacity</label>
-            <input type="range" id="layerOpacity" min="0" max="100" value="100" class="prop-slider" />
-            <span id="layerOpacityVal">100%</span>
-          </div>
-          <div class="prop-row">
-            <label>Blend Mode</label>
-            <select id="layerBlend" class="prop-select">
-              <option value="source-over">Normal</option>
-              <option value="multiply">Multiply</option>
-              <option value="screen">Screen</option>
-              <option value="overlay">Overlay</option>
-              <option value="darken">Darken</option>
-              <option value="lighten">Lighten</option>
-              <option value="color-dodge">Color Dodge</option>
-              <option value="color-burn">Color Burn</option>
-              <option value="hard-light">Hard Light</option>
-              <option value="soft-light">Soft Light</option>
-              <option value="difference">Difference</option>
-              <option value="exclusion">Exclusion</option>
-              <option value="hue">Hue</option>
-              <option value="saturation">Saturation</option>
-              <option value="color">Color</option>
-              <option value="luminosity">Luminosity</option>
-            </select>
-          </div>
-          <div class="prop-row">
-            <label>Posisi X</label>
-            <input type="number" id="layerX" value="0" class="prop-input" />
-            <label>Y</label>
-            <input type="number" id="layerY" value="0" class="prop-input" />
-          </div>
-          <div class="prop-row">
-            <label>Lebar</label>
-            <input type="number" id="layerW" value="0" class="prop-input" />
-            <label>Tinggi</label>
-            <input type="number" id="layerH" value="0" class="prop-input" />
-          </div>
-          <div class="prop-row">
-            <label>Rotasi</label>
-            <input type="range" id="layerRotate" min="-180" max="180" value="0" class="prop-slider" />
-            <span id="layerRotateVal">0°</span>
-          </div>
-          <button class="btn btn-sm btn-ghost" id="btnApplyProps">Apply</button>
+    <!-- TEXT -->
+    <div class="ipanel" id="tab-text">
+      <div class="isec-title">Text Content</div>
+      <textarea id="tContent" class="itextarea" placeholder="Ketik teks…">Hello World</textarea>
+      <div class="irow">
+        <label>Font</label>
+        <select id="tFont" class="isel">
+          <option value="Space Grotesk,sans-serif">Space Grotesk</option>
+          <option value="JetBrains Mono,monospace">JetBrains Mono</option>
+          <option value="Georgia,serif">Georgia</option>
+          <option value="Arial,sans-serif">Arial</option>
+          <option value="Impact,sans-serif">Impact</option>
+          <option value="Courier New,monospace">Courier New</option>
+          <option value="Times New Roman,serif">Times New Roman</option>
+          <option value="Verdana,sans-serif">Verdana</option>
+        </select>
+      </div>
+      <div class="irow">
+        <label>Size</label><input type="number" id="tSize" value="48" min="8" max="400" class="inum"/>
+        <label>px &nbsp; Weight</label>
+        <select id="tWeight" class="isel isel-sm">
+          <option value="300">Thin</option>
+          <option value="400">Normal</option>
+          <option value="600">Semi</option>
+          <option value="700" selected>Bold</option>
+          <option value="900">Black</option>
+        </select>
+      </div>
+      <div class="irow">
+        <label>Style</label>
+        <select id="tStyle" class="isel isel-sm">
+          <option value="normal">Normal</option>
+          <option value="italic">Italic</option>
+        </select>
+        <label>Align</label>
+        <div class="btngrp">
+          <button class="bgtbtn active" data-align="left">L</button>
+          <button class="bgtbtn" data-align="center">C</button>
+          <button class="bgtbtn" data-align="right">R</button>
         </div>
       </div>
-
-      <!-- TEXT TAB -->
-      <div class="panel-content" id="tab-text">
-        <div class="panel-section">
-          <div class="section-header"><span>Tambah Teks</span></div>
-          <textarea id="textContent" class="text-input" placeholder="Ketik teks di sini...">Teks Kamu</textarea>
-          <div class="prop-row">
-            <label>Font</label>
-            <select id="textFont" class="prop-select">
-              <option value="Syne, sans-serif">Syne</option>
-              <option value="Space Mono, monospace">Space Mono</option>
-              <option value="Georgia, serif">Georgia</option>
-              <option value="Arial, sans-serif">Arial</option>
-              <option value="Impact, sans-serif">Impact</option>
-              <option value="Courier New, monospace">Courier New</option>
-              <option value="Times New Roman, serif">Times New Roman</option>
-              <option value="Verdana, sans-serif">Verdana</option>
-              <option value="Trebuchet MS, sans-serif">Trebuchet MS</option>
-              <option value="Palatino, serif">Palatino</option>
-            </select>
-          </div>
-          <div class="prop-row">
-            <label>Size</label>
-            <input type="number" id="textSize" value="48" min="8" max="400" class="prop-input" />
-            <label>px</label>
-          </div>
-          <div class="prop-row">
-            <label>Weight</label>
-            <select id="textWeight" class="prop-select">
-              <option value="normal">Normal</option>
-              <option value="bold">Bold</option>
-              <option value="100">Thin</option>
-              <option value="300">Light</option>
-              <option value="500">Medium</option>
-              <option value="700">Bold</option>
-              <option value="900">Black</option>
-            </select>
-            <label>Style</label>
-            <select id="textStyle" class="prop-select">
-              <option value="normal">Normal</option>
-              <option value="italic">Italic</option>
-            </select>
-          </div>
-          <div class="prop-row">
-            <label>Align</label>
-            <div class="btn-group">
-              <button class="mini-btn active" data-align="left">⬤ L</button>
-              <button class="mini-btn" data-align="center">⬤ C</button>
-              <button class="mini-btn" data-align="right">⬤ R</button>
-            </div>
-          </div>
-          <div class="prop-row">
-            <label>Warna</label>
-            <input type="color" id="textColor" value="#ffffff" class="color-input" />
-            <label>Lbr Baris</label>
-            <input type="number" id="textLineH" value="1.2" step="0.1" min="0.5" max="4" class="prop-input" />
-          </div>
-          <!-- Stroke -->
-          <div class="section-header"><span>Stroke</span></div>
-          <div class="prop-row">
-            <label>Stroke</label>
-            <input type="color" id="textStrokeColor" value="#000000" class="color-input" />
-            <label>Size</label>
-            <input type="number" id="textStrokeSize" value="0" min="0" max="50" class="prop-input" />
-          </div>
-          <!-- Shadow -->
-          <div class="section-header"><span>Shadow</span></div>
-          <div class="prop-row">
-            <label>Warna</label>
-            <input type="color" id="textShadowColor" value="#000000" class="color-input" />
-            <label>Blur</label>
-            <input type="number" id="textShadowBlur" value="0" min="0" max="50" class="prop-input" />
-          </div>
-          <div class="prop-row">
-            <label>Offset X</label>
-            <input type="number" id="textShadowX" value="0" min="-50" max="50" class="prop-input" />
-            <label>Y</label>
-            <input type="number" id="textShadowY" value="2" min="-50" max="50" class="prop-input" />
-          </div>
-          <!-- BG Highlight -->
-          <div class="section-header"><span>Background Teks</span></div>
-          <div class="prop-row">
-            <label>BG Color</label>
-            <input type="color" id="textBgColor" value="#000000" class="color-input" />
-            <label>Opacity</label>
-            <input type="number" id="textBgOpacity" value="0" min="0" max="100" class="prop-input" />
-          </div>
-          <div class="prop-row">
-            <label>Padding</label>
-            <input type="number" id="textBgPad" value="8" min="0" max="50" class="prop-input" />
-          </div>
-          <button class="btn btn-primary w-full" id="btnInsertText">+ Masukkan Teks</button>
-        </div>
+      <div class="irow">
+        <label>Color</label><input type="color" id="tColor" value="#ffffff" class="icolor"/>
+        <label>Line H</label><input type="number" id="tLineH" value="1.2" step="0.1" min="0.5" max="5" class="inum"/>
       </div>
-
-      <!-- ADJUST TAB -->
-      <div class="panel-content" id="tab-adjust">
-        <div class="panel-section">
-          <div class="section-header"><span>Koreksi Warna</span></div>
-          <div class="prop-row"><label>Brightness</label><input type="range" id="adjBrightness" min="-150" max="150" value="0" class="prop-slider" /><span id="adjBrightnessVal">0</span></div>
-          <div class="prop-row"><label>Contrast</label><input type="range" id="adjContrast" min="-100" max="100" value="0" class="prop-slider" /><span id="adjContrastVal">0</span></div>
-          <div class="prop-row"><label>Saturasi</label><input type="range" id="adjSaturate" min="-100" max="100" value="0" class="prop-slider" /><span id="adjSaturateVal">0</span></div>
-          <div class="prop-row"><label>Hue</label><input type="range" id="adjHue" min="-180" max="180" value="0" class="prop-slider" /><span id="adjHueVal">0°</span></div>
-          <div class="prop-row"><label>Blur</label><input type="range" id="adjBlur" min="0" max="20" value="0" step="0.5" class="prop-slider" /><span id="adjBlurVal">0px</span></div>
-          <div class="prop-row"><label>Sepia</label><input type="range" id="adjSepia" min="0" max="100" value="0" class="prop-slider" /><span id="adjSepiaVal">0%</span></div>
-          <div class="prop-row"><label>Invert</label><input type="range" id="adjInvert" min="0" max="100" value="0" class="prop-slider" /><span id="adjInvertVal">0%</span></div>
-          <div class="prop-row"><label>Grayscale</label><input type="range" id="adjGrayscale" min="0" max="100" value="0" class="prop-slider" /><span id="adjGrayscaleVal">0%</span></div>
-          <button class="btn btn-sm btn-ghost w-full" id="btnApplyAdj">Apply ke Layer</button>
-          <button class="btn btn-sm btn-ghost w-full" id="btnResetAdj">Reset</button>
-        </div>
-        <div class="panel-section">
-          <div class="section-header"><span>Filter Cepat</span></div>
-          <div class="filter-grid">
-            <button class="filter-btn" data-filter="none">Normal</button>
-            <button class="filter-btn" data-filter="grayscale(100%)">B&W</button>
-            <button class="filter-btn" data-filter="sepia(80%)">Sepia</button>
-            <button class="filter-btn" data-filter="saturate(200%)">Vivid</button>
-            <button class="filter-btn" data-filter="brightness(1.3) contrast(1.2)">Bright</button>
-            <button class="filter-btn" data-filter="contrast(1.5)">Drama</button>
-            <button class="filter-btn" data-filter="hue-rotate(90deg)">Hue+90</button>
-            <button class="filter-btn" data-filter="invert(100%)">Invert</button>
-            <button class="filter-btn" data-filter="blur(2px)">Dreamy</button>
-            <button class="filter-btn" data-filter="brightness(0.8) sepia(40%) saturate(150%)">Vintage</button>
-          </div>
-        </div>
+      <div class="isep"></div>
+      <div class="isec-title">Stroke</div>
+      <div class="irow">
+        <label>Color</label><input type="color" id="tStrokeColor" value="#000000" class="icolor"/>
+        <label>Width</label><input type="number" id="tStrokeW" value="0" min="0" max="40" class="inum"/>
       </div>
-
-      <!-- SHAPE TAB -->
-      <div class="panel-content" id="tab-shape">
-        <div class="panel-section">
-          <div class="section-header"><span>Tambah Shape</span></div>
-          <div class="shape-grid">
-            <button class="shape-pick" data-shape="rect">▭ Rect</button>
-            <button class="shape-pick" data-shape="rounded-rect">▢ Rounded</button>
-            <button class="shape-pick" data-shape="circle">○ Circle</button>
-            <button class="shape-pick" data-shape="ellipse">◯ Ellipse</button>
-            <button class="shape-pick" data-shape="triangle">△ Triangle</button>
-            <button class="shape-pick" data-shape="star">★ Star</button>
-            <button class="shape-pick" data-shape="line">— Line</button>
-            <button class="shape-pick" data-shape="arrow">→ Arrow</button>
-          </div>
-          <div class="prop-row">
-            <label>Fill</label>
-            <input type="color" id="shapeFill" value="#ff4444" class="color-input" />
-            <label>Stroke</label>
-            <input type="color" id="shapeStroke" value="#000000" class="color-input" />
-          </div>
-          <div class="prop-row">
-            <label>Stroke W</label>
-            <input type="number" id="shapeStrokeW" value="2" min="0" max="20" class="prop-input" />
-            <label>Opacity</label>
-            <input type="number" id="shapeOpacity" value="100" min="0" max="100" class="prop-input" />
-          </div>
-          <div class="prop-row">
-            <label>Lebar</label>
-            <input type="number" id="shapeW" value="200" min="10" class="prop-input" />
-            <label>Tinggi</label>
-            <input type="number" id="shapeH" value="150" min="10" class="prop-input" />
-          </div>
-          <button class="btn btn-primary w-full" id="btnInsertShape">+ Masukkan Shape</button>
-        </div>
+      <div class="isep"></div>
+      <div class="isec-title">Shadow</div>
+      <div class="irow">
+        <label>Color</label><input type="color" id="tShadowColor" value="#000000" class="icolor"/>
+        <label>Blur</label><input type="number" id="tShadowBlur" value="0" min="0" max="60" class="inum"/>
       </div>
-
-    </aside>
-  </div>
-
-  <!-- HIDDEN FILE INPUT -->
-  <input type="file" id="fileInput" accept="image/*" style="display:none" />
-
-  <!-- DOWNLOAD MODAL -->
-  <div class="modal-backdrop" id="dlModal" style="display:none;">
-    <div class="modal">
-      <div class="modal-header">Download Gambar</div>
-      <div class="modal-body">
-        <div class="prop-row">
-          <label>Format</label>
-          <select id="dlFormat" class="prop-select">
-            <option value="png">PNG (lossless)</option>
-            <option value="jpeg">JPEG</option>
-            <option value="webp">WebP</option>
-          </select>
-        </div>
-        <div class="prop-row">
-          <label>Kualitas</label>
-          <div class="quality-btns">
-            <button class="quality-btn" data-q="low">Low</button>
-            <button class="quality-btn active" data-q="mid">Mid</button>
-            <button class="quality-btn" data-q="high">High</button>
-            <button class="quality-btn" data-q="max">Max</button>
-          </div>
-        </div>
-        <div class="prop-row" id="dlScaleRow">
-          <label>Scale</label>
-          <input type="number" id="dlScale" value="1" min="0.1" max="4" step="0.1" class="prop-input" />
-          <span>× ({{w}}×{{h}} → <span id="dlFinalSize">800×600</span>)</span>
-        </div>
-        <div class="prop-row">
-          <label>Nama File</label>
-          <input type="text" id="dlFilename" value="pixelforge-export" class="prop-input" style="width:160px;" />
-        </div>
+      <div class="irow">
+        <label>X</label><input type="number" id="tShadowX" value="0" min="-50" max="50" class="inum"/>
+        <label>Y</label><input type="number" id="tShadowY" value="3" min="-50" max="50" class="inum"/>
       </div>
-      <div class="modal-footer">
-        <button class="btn btn-ghost" id="dlCancel">Batal</button>
-        <button class="btn btn-primary" id="dlConfirm">⬇ Download</button>
+      <div class="isep"></div>
+      <div class="isec-title">Background</div>
+      <div class="irow">
+        <label>Color</label><input type="color" id="tBgColor" value="#000000" class="icolor"/>
+        <label>Alpha</label><input type="number" id="tBgAlpha" value="0" min="0" max="100" class="inum"/>
+        <label>Pad</label><input type="number" id="tBgPad" value="8" min="0" max="60" class="inum"/>
+      </div>
+      <button class="ibtn-full ibtn-accent" id="btnTextAction">+ Add Text</button>
+    </div>
+
+    <!-- SHAPE -->
+    <div class="ipanel" id="tab-shape">
+      <div class="isec-title">Shape Type</div>
+      <div class="shape-grid">
+        <button class="sgbtn active" data-shape="rect">▭ Rect</button>
+        <button class="sgbtn" data-shape="rounded-rect">▢ Round</button>
+        <button class="sgbtn" data-shape="circle">○ Circle</button>
+        <button class="sgbtn" data-shape="ellipse">◯ Ellipse</button>
+        <button class="sgbtn" data-shape="triangle">△ Triangle</button>
+        <button class="sgbtn" data-shape="star">★ Star</button>
+        <button class="sgbtn" data-shape="line">— Line</button>
+        <button class="sgbtn" data-shape="arrow">→ Arrow</button>
+      </div>
+      <div class="irow">
+        <label>Fill</label><input type="color" id="sFill" value="#ef4444" class="icolor"/>
+        <label>Stroke</label><input type="color" id="sStroke" value="#000000" class="icolor"/>
+        <label>W</label><input type="number" id="sStrokeW" value="0" min="0" max="30" class="inum"/>
+      </div>
+      <div class="irow">
+        <label>Width</label><input type="number" id="sW" value="200" min="10" class="inum"/>
+        <label>Height</label><input type="number" id="sH" value="150" min="10" class="inum"/>
+      </div>
+      <button class="ibtn-full ibtn-accent" id="btnShapeAction">+ Add Shape</button>
+    </div>
+
+    <!-- ADJUST -->
+    <div class="ipanel" id="tab-adjust">
+      <div class="isec-title">Image Adjustments</div>
+      <div class="adjrow"><label>Brightness</label><input type="range" id="aBright" min="-150" max="150" value="0" class="islider"/><span class="ival" id="aBrightV">0</span></div>
+      <div class="adjrow"><label>Contrast</label><input type="range" id="aContrast" min="-100" max="100" value="0" class="islider"/><span class="ival" id="aContrastV">0</span></div>
+      <div class="adjrow"><label>Saturate</label><input type="range" id="aSat" min="-100" max="100" value="0" class="islider"/><span class="ival" id="aSatV">0</span></div>
+      <div class="adjrow"><label>Hue</label><input type="range" id="aHue" min="-180" max="180" value="0" class="islider"/><span class="ival" id="aHueV">0°</span></div>
+      <div class="adjrow"><label>Blur</label><input type="range" id="aBlur" min="0" max="20" value="0" step="0.5" class="islider"/><span class="ival" id="aBlurV">0px</span></div>
+      <div class="adjrow"><label>Sepia</label><input type="range" id="aSepia" min="0" max="100" value="0" class="islider"/><span class="ival" id="aSepiaV">0%</span></div>
+      <div class="adjrow"><label>Invert</label><input type="range" id="aInvert" min="0" max="100" value="0" class="islider"/><span class="ival" id="aInvertV">0%</span></div>
+      <div class="adjrow"><label>Grayscale</label><input type="range" id="aGray" min="0" max="100" value="0" class="islider"/><span class="ival" id="aGrayV">0%</span></div>
+      <div class="irow">
+        <button class="ibtn-full" id="btnApplyAdj">Apply</button>
+        <button class="ibtn-full" id="btnResetAdj">Reset</button>
+      </div>
+      <div class="isep"></div>
+      <div class="isec-title">Quick Filters</div>
+      <div class="filter-grid">
+        <button class="fltbtn" data-f="">Normal</button>
+        <button class="fltbtn" data-f="grayscale(1)">B&amp;W</button>
+        <button class="fltbtn" data-f="sepia(.8)">Sepia</button>
+        <button class="fltbtn" data-f="saturate(2)">Vivid</button>
+        <button class="fltbtn" data-f="brightness(1.3) contrast(1.2)">Bright</button>
+        <button class="fltbtn" data-f="contrast(1.6)">Drama</button>
+        <button class="fltbtn" data-f="hue-rotate(90deg)">Hue+90</button>
+        <button class="fltbtn" data-f="invert(1)">Invert</button>
+        <button class="fltbtn" data-f="brightness(.8) sepia(.4) saturate(1.5)">Vintage</button>
+        <button class="fltbtn" data-f="blur(2px)">Dream</button>
       </div>
     </div>
-  </div>
+  </aside>
+</div>
 
-  <!-- CANVAS SIZE MODAL -->
-  <div class="modal-backdrop" id="canvasModal" style="display:none;">
-    <div class="modal">
-      <div class="modal-header">Buat Canvas Baru</div>
-      <div class="modal-body">
-        <div class="prop-row">
-          <label>Lebar</label><input type="number" id="newW" value="800" class="prop-input" />
-          <label>Tinggi</label><input type="number" id="newH" value="600" class="prop-input" />
-        </div>
-        <div class="prop-row">
-          <label>Background</label>
-          <input type="color" id="newBg" value="#ffffff" class="color-input" />
-          <select id="newPreset" class="prop-select">
-            <option value="">Preset...</option>
-            <option value="1920,1080">1920×1080</option>
-            <option value="1280,720">1280×720</option>
-            <option value="1080,1080">1080×1080</option>
-            <option value="1080,1920">1080×1920</option>
-            <option value="800,600">800×600</option>
-          </select>
+<!-- MODALS -->
+<div class="modal-bg" id="dlModal">
+  <div class="modal">
+    <div class="modal-title">Download Image</div>
+    <div class="modal-body">
+      <div class="mrow"><label>Format</label>
+        <select id="dlFmt" class="isel"><option value="png">PNG</option><option value="jpeg">JPEG</option><option value="webp">WebP</option></select>
+      </div>
+      <div class="mrow"><label>Quality</label>
+        <div class="btngrp" id="dlQuality">
+          <button class="bgtbtn" data-q=".3">Low</button>
+          <button class="bgtbtn active" data-q=".7">Mid</button>
+          <button class="bgtbtn" data-q=".9">High</button>
+          <button class="bgtbtn" data-q="1">Max</button>
         </div>
       </div>
-      <div class="modal-footer">
-        <button class="btn btn-ghost" id="newCanvasCancel">Batal</button>
-        <button class="btn btn-primary" id="newCanvasConfirm">Buat</button>
+      <div class="mrow"><label>Scale</label>
+        <input type="number" id="dlScale" value="1" min=".1" max="4" step=".1" class="inum" style="width:60px"/>×
+        <span id="dlSize" style="color:var(--accent);font-size:12px"></span>
       </div>
+      <div class="mrow"><label>Filename</label><input type="text" id="dlName" value="pixelforge" class="inum" style="width:140px"/></div>
+    </div>
+    <div class="modal-foot">
+      <button class="ibtn" id="dlCancel">Cancel</button>
+      <button class="ibtn ibtn-accent" id="dlConfirm">↓ Download</button>
     </div>
   </div>
+</div>
 
-  <!-- TOAST -->
-  <div class="toast" id="toast"></div>
+<div class="modal-bg" id="newModal">
+  <div class="modal">
+    <div class="modal-title">New Canvas</div>
+    <div class="modal-body">
+      <div class="mrow"><label>Width</label><input type="number" id="nW" value="800" class="inum"/></div>
+      <div class="mrow"><label>Height</label><input type="number" id="nH" value="600" class="inum"/></div>
+      <div class="mrow"><label>Background</label><input type="color" id="nBg" value="#ffffff" class="icolor"/></div>
+      <div class="mrow"><label>Preset</label>
+        <select id="nPreset" class="isel">
+          <option value="">Custom…</option>
+          <option value="1920,1080">1920×1080</option>
+          <option value="1280,720">1280×720</option>
+          <option value="1080,1080">1080×1080</option>
+          <option value="1080,1920">1080×1920</option>
+          <option value="800,600">800×600</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="ibtn" id="nCancel">Cancel</button>
+      <button class="ibtn ibtn-accent" id="nConfirm">Create</button>
+    </div>
+  </div>
+</div>
 
-  <script src="editor.js"></script>
+<input type="file" id="fileInput" accept="image/*" style="display:none"/>
+<div id="toast"></div>
+<div id="tooltip"></div>
+
+<script src="editor.js"></script>
 </body>
 </html>
